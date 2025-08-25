@@ -1,8 +1,12 @@
 
+import 'package:flutter/services.dart';
+
 import '../../utils/imports.dart';
 
 class LoginScreen extends StatelessWidget {
   final AuthController authController = Get.put(AuthController());
+
+   LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +23,13 @@ class LoginScreen extends StatelessWidget {
             SizedBox(height: 40),
             TextField(
               controller: authController.phoneController,
-              keyboardType: TextInputType.phone,
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+              ],
               maxLength: 10,
               decoration: InputDecoration(
-                labelText: 'Phone Number',
+                labelText: 'Phone Number*',
                 border: OutlineInputBorder(),
                 counterText: '',
               ),

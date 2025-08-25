@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:organic_grow/config/app_color.dart';
 import 'package:organic_grow/core/controllers/home_page_controller.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -88,7 +89,7 @@ class FeaturedProductWidget extends StatelessWidget {
                                 '\$${product.price.toStringAsFixed(2)}',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.green,
+                                  color: AppColor.primaryColor,
                                 ),
                               ),
                             ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:organic_grow/config/app_color.dart';
 import 'package:organic_grow/core/controllers/home_page_controller.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -37,10 +38,10 @@ class CategoriesSectionWidget extends StatelessWidget {
                         width: 64,
                         height: 64,
                         decoration: BoxDecoration(
-                          color: Colors.green.withOpacity(0.1),
+                          color: AppColor.primaryColor.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        child: Icon(icon, color: Colors.green, size: 32),
+                        child: Icon(icon, color: AppColor.primaryColor, size: 32),
                       ),
                       const SizedBox(height: 8),
                       Text(

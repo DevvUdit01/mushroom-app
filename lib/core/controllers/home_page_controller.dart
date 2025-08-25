@@ -3,6 +3,7 @@ import 'package:organic_grow/core/models/category_model.dart';
 import 'package:organic_grow/core/models/product_model.dart';
 import 'package:organic_grow/core/services/api_services.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:organic_grow/core/controllers/connectivity_controller.dart';
 
 class HomeController extends GetxController {
   var categories = <Category>[].obs;
@@ -11,9 +12,10 @@ class HomeController extends GetxController {
   var currentCarouselIndex = 0.obs;
   var isLoading = true.obs;
   var isRefreshing = false.obs;
-
-  // ✅ Own RefreshController here
+  
   final RefreshController refreshController = RefreshController();
+
+  final ConnectivityController connectivityController = Get.find<ConnectivityController>();
 
   @override
   void onInit() {
@@ -23,28 +25,35 @@ class HomeController extends GetxController {
 
   Future<void> fetchHomeData() async {
     try {
+      await connectivityController.checkConnection();
+      if (!connectivityController.isConnected) {
+        refreshController.refreshFailed();
+        isLoading.value = false;
+        isRefreshing.value = false;
+        Get.snackbar("No Internet", "Please check your connection and try again",
+            snackPosition: SnackPosition.BOTTOM);
+        return;
+      }
+
       isLoading.value = true;
 
-      // Fetch all data
       final categoriesData = await ApiService.fetchCategories();
       final productsData = await ApiService.fetchFeaturedProducts();
       final bannersData = await ApiService.fetchBanners();
 
-      // Update observable variables
       categories.assignAll(categoriesData);
       featuredProducts.assignAll(productsData);
       banners.assignAll(bannersData);
 
       isLoading.value = false;
       isRefreshing.value = false;
-
-      // ✅ Stop refresher if pull-to-refresh triggered it
       refreshController.refreshCompleted();
     } catch (e) {
       isLoading.value = false;
       isRefreshing.value = false;
-      refreshController.refreshFailed(); // ✅ mark refresh as failed
-      Get.snackbar('Error', 'Failed to load data: $e');
+      refreshController.refreshFailed();
+      Get.snackbar('Error', 'Failed to load data: $e',
+          snackPosition: SnackPosition.BOTTOM);
     }
   }
 
@@ -59,7 +68,7 @@ class HomeController extends GetxController {
 
   @override
   void onClose() {
-    refreshController.dispose(); // ✅ clean up
+    refreshController.dispose();
     super.onClose();
   }
 }

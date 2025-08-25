@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:organic_grow/config/app_color.dart';
 import 'package:organic_grow/core/controllers/home_page_controller.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -59,7 +60,7 @@ class CarouselSliderWidget extends StatelessWidget {
             effect: const ExpandingDotsEffect(
               dotHeight: 8,
               dotWidth: 8,
-              activeDotColor: Colors.green,
+              activeDotColor: AppColor.primaryColor,
               dotColor: Colors.grey,
             ),
           ),

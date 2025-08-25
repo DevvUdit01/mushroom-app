@@ -27,7 +27,7 @@ class HomeScreen extends GetView<HomeController> {
         onRefresh: homeController.refreshData,        
         enablePullDown: true,
         enablePullUp: false,
-        header: const WaterDropHeader(waterDropColor: Colors.green),
+        header: const WaterDropHeader(waterDropColor: AppColor.primaryColor),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

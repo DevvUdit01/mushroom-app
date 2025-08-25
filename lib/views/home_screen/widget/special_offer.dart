@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:organic_grow/config/app_color.dart';
 import 'package:shimmer/shimmer.dart';
 
 class SpecialOffersWidget extends StatelessWidget {
@@ -22,7 +23,7 @@ class SpecialOffersWidget extends StatelessWidget {
               gradient: LinearGradient(
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
-                colors: [Colors.green[300]!, Colors.green[700]!],
+                colors: [AppColor.primaryColor, AppColor.secondaryColor],
               ),
               borderRadius: BorderRadius.circular(16),
             ),
@@ -60,7 +61,7 @@ class SpecialOffersWidget extends StatelessWidget {
                           child: const Text(
                             'ORDER NOW',
                             style: TextStyle(
-                              color: Colors.green,
+                              color: AppColor.primaryColor,
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
                             ),
