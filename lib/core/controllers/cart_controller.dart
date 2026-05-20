@@ -210,6 +210,12 @@ class CartController extends GetxController {
     deliveryCharge.value = 0.0;
   }
 
+  /// Clear local cart state (public accessor for logout)
+  void clearLocalCart() {
+    _clearLocalState();
+  }
+
+
   /// Zomato-style vendor switch confirmation dialog
   void _showVendorSwitchDialog(CartItem newItem) {
     Get.dialog(

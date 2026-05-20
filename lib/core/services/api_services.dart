@@ -5,6 +5,9 @@ import 'package:organic_grow/core/models/category_model.dart';
 import 'package:organic_grow/core/models/product_model.dart';
 import 'package:organic_grow/core/models/vendor_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart' hide Response;
+import 'package:organic_grow/core/controllers/cart_controller.dart';
+import 'package:organic_grow/core/controllers/wishlist_controller.dart';
 
 class ApiService {
   static const String baseUrl = 'http://192.168.1.15:5000/api';
@@ -40,6 +43,8 @@ class ApiService {
       userToken = prefs.getString(_tokenKey);
       if (userToken != null && userToken!.isNotEmpty) {
         initInterceptors();
+        // Load cart and wishlist from server once token is loaded
+        _fetchUserDataOnTokenChange();
       }
     } catch (e) {
       debugPrint("Failed to load saved token: $e");
@@ -53,6 +58,8 @@ class ApiService {
       await prefs.setString(_tokenKey, token);
       userToken = token;
       initInterceptors();
+      // Load cart and wishlist from server once token is saved
+      _fetchUserDataOnTokenChange();
     } catch (e) {
       debugPrint("Failed to save token: $e");
     }
@@ -65,8 +72,38 @@ class ApiService {
       await prefs.remove(_tokenKey);
       userToken = null;
       initInterceptors();
+      // Clear cart and wishlist on logout
+      _clearUserDataOnLogout();
     } catch (e) {
       debugPrint("Failed to clear token: $e");
+    }
+  }
+
+  // Helper helper to fetch cart and wishlist on token load/save
+  static void _fetchUserDataOnTokenChange() {
+    try {
+      if (Get.isRegistered<CartController>()) {
+        Get.find<CartController>().fetchCartFromServer();
+      }
+      if (Get.isRegistered<WishlistController>()) {
+        Get.find<WishlistController>().fetchWishlistFromServer();
+      }
+    } catch (e) {
+      debugPrint("Failed to load user data on token change: $e");
+    }
+  }
+
+  // Helper helper to clear cart and wishlist on logout
+  static void _clearUserDataOnLogout() {
+    try {
+      if (Get.isRegistered<CartController>()) {
+        Get.find<CartController>().clearLocalCart();
+      }
+      if (Get.isRegistered<WishlistController>()) {
+        Get.find<WishlistController>().wishlistItems.clear();
+      }
+    } catch (e) {
+      debugPrint("Failed to clear user data on logout: $e");
     }
   }
 
