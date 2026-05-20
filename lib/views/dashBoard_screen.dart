@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:organic_grow/config/app_color.dart';
 import 'package:organic_grow/core/controllers/cart_controller.dart';
 import 'package:organic_grow/core/controllers/dashBoard_controller.dart';
 import 'package:organic_grow/core/controllers/connectivity_controller.dart';
 import 'package:organic_grow/core/controllers/home_page_controller.dart';
 import 'package:organic_grow/core/controllers/profile_controller.dart';
 import 'package:organic_grow/core/controllers/settings_controller.dart';
+import 'package:organic_grow/core/controllers/wishlist_controller.dart';
 
 
 
@@ -17,6 +19,7 @@ class DashBoardScreen extends GetView<DashBoardController> {
     Get.lazyPut<HomeController>(() => HomeController());
     Get.lazyPut<SettingsController>(() => SettingsController());
     Get.lazyPut<CartController>(() => CartController());
+    Get.lazyPut<WishlistController>(() => WishlistController());
     
     Get.put(ConnectivityController()); // inject connectivity controller
   }
@@ -55,25 +58,27 @@ class DashBoardScreen extends GetView<DashBoardController> {
         return controller.screens[controller.selectedIndex.value];
       }),
       bottomNavigationBar: Obx(() {
-        return CurvedNavigationBar(
-          index: controller.selectedIndex.value,
-          height: 60,
-          color: Colors.purple,
-          buttonBackgroundColor: Colors.purple,
-          backgroundColor: Colors.white,
-          animationCurve: Curves.easeInOut,
-          animationDuration: const Duration(milliseconds: 400),
-          items: const [
-            Icon(Icons.person, size: 30, color: Colors.white),
-            Icon(Icons.category, size: 30, color: Colors.white),
-            Icon(Icons.home, size: 30, color: Colors.white),
-            Icon(Icons.card_travel, size: 30, color: Colors.white),
-            Icon(Icons.settings, size: 30, color: Colors.white),
-          ],
-          onTap: (index) {
-            controller.onTabChange(index);
-            connectivityController.checkConnection(); // ✅ optional: recheck when switching tab
-          },
+        return SafeArea(
+          child: CurvedNavigationBar(
+            index: controller.selectedIndex.value,
+            height: 60,
+            color: AppColor.primaryColor,
+            buttonBackgroundColor: AppColor.primaryColor,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            animationCurve: Curves.easeInOut,
+            animationDuration: const Duration(milliseconds: 400),
+            items: const [
+              Icon(Icons.person_rounded, size: 28, color: Colors.white),
+              Icon(Icons.category_rounded, size: 28, color: Colors.white),
+              Icon(Icons.home_rounded, size: 28, color: Colors.white),
+              Icon(Icons.shopping_cart_rounded, size: 28, color: Colors.white),
+              Icon(Icons.settings_rounded, size: 28, color: Colors.white),
+            ],
+            onTap: (index) {
+              controller.onTabChange(index);
+              connectivityController.checkConnection(); // ✅ optional: recheck when switching tab
+            },
+          ),
         );
       }),
     );

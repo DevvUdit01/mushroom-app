@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SettingsController extends GetxController {
@@ -7,7 +8,7 @@ class SettingsController extends GetxController {
 
   void toggleDarkMode(bool value) {
     isDarkMode.value = value;
-    // You can add theme switching logic here
+    Get.changeThemeMode(value ? ThemeMode.dark : ThemeMode.light);
   }
 
   void toggleNotification(bool value) {

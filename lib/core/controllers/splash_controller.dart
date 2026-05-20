@@ -1,4 +1,7 @@
+import 'package:organic_grow/core/services/api_services.dart';
 import '../../utils/imports.dart';
+
+import 'package:organic_grow/core/controllers/profile_controller.dart';
 
 class SplashController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -46,10 +49,44 @@ class SplashController extends GetxController
     });
   }
 
-  void navigateToHome() {
-    Future.delayed(const Duration(seconds: 3), () {
-      print("navigate to login page");
-      Get.offAllNamed(RouteConstant.dashBoardPae);
+  Future<void> navigateToHome() async {
+    // Load local persisted token asynchronously from SharedPreferences
+    await ApiService.loadToken();
+    Future.delayed(const Duration(seconds: 3), () async {
+      if (ApiService.userToken == null || ApiService.userToken!.isEmpty) {
+        print("No token stored, navigating to Login Screen");
+        Get.offAllNamed(RouteConstant.loginPage);
+      } else {
+        try {
+          print("Token exists, verifying profile completion status...");
+          final profile = await ApiService.fetchProfile();
+          final user = profile['user'];
+          
+          // Populate the global user profile data state during app initialization
+          try {
+            final profileController = Get.isRegistered<ProfileController>()
+                ? Get.find<ProfileController>()
+                : Get.put(ProfileController());
+            await profileController.fetchUserProfile();
+          } catch (_) {}
+          
+          if (user != null && (user['name'] == null || user['name'].toString().trim().isEmpty)) {
+            // Token is active but registration is incomplete -> Redirect to Register screen
+            print("Profile incomplete, redirecting to Register Screen");
+            final phone = user['phone'] ?? '';
+            Get.offAllNamed(RouteConstant.registerPage, arguments: phone);
+          } else {
+            // Profile is fully complete -> Send to Dashboard
+            print("Profile complete, navigating to Dashboard Screen");
+            Get.offAllNamed(RouteConstant.dashBoardPae);
+          }
+        } catch (e) {
+          // If token is invalid/expired or connection fails, clear token and route to Login
+          print("Profile fetch failed, resetting token session: $e");
+          await ApiService.clearToken();
+          Get.offAllNamed(RouteConstant.loginPage);
+        }
+      }
     });
   }
 

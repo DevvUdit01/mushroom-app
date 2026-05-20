@@ -33,7 +33,7 @@ class SplashScreen extends StatelessWidget {
                           decoration: const BoxDecoration(
                             image: DecorationImage(
                               image: AssetImage(
-                                'assets/banner_images/banner3.png',
+                                'assets/images/logo.png',
                               ),
                               fit: BoxFit.contain,
                             ),
@@ -50,7 +50,7 @@ class SplashScreen extends StatelessWidget {
                 FadeTransition(
                   opacity: controller.fadeAnimation,
                   child: const Text(
-                    'Organic Grow',
+                    'RiFresh Odisha',
                     style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
